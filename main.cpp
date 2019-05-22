@@ -28,6 +28,13 @@ myFile.close();
 return 0;
 }
 
+void checkEuler(){
+    if(int nodeEdge >= 2){
+        std::cout << "No path available."
+    };
+
+}
+
 
 /*
     -Input från en fil, dynamisk char/string array? alternativt vektor/er.
@@ -44,4 +51,9 @@ return 0;
     outfile << "my text here!" << std::endl;
 
     outfile.close();
+*/
+
+/*
+        EN GRAF INNEHÅLLER MINST 1 EULERVÄG OM HÖGST 2 AV GRAFENS HÖRN ÄR UDDA HÖRN
+
 */

@@ -5,8 +5,8 @@
 
 
 int main(){
-int size = 10;
-char(*ary)[10] = new char[size][10];
+int contentSize = 10;
+char(*ary)[10] = new char[contentSize][10];
 
 }
 

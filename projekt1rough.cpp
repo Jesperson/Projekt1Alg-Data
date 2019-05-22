@@ -11,7 +11,7 @@ std::string fileInfo[limit_arr]; //Ta limit_arr och lägg till i arrayen som kom
 std::string line; //En rad från input filen
 std::string fileLocation; //Exakt position för input filen, skrivs in manuellt.
 
-//Variabler
+//Variabler slut
 std::cout << "What is the exact file location, including the filename?" << std::endl;
 std::cin >> fileLocation;
 std::ifstream inputFile(fileLocation);

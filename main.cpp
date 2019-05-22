@@ -2,7 +2,7 @@
 #include <fstream>
 #include <string>
 
-int readFile(){}
+int readFile(){};
 
 int main(){
 std::string fileName = argv[1];
@@ -39,7 +39,7 @@ return 0;
 
 /*
     -----Output fil-----
-    std::ofstream outfile ("test.txt");
+    std::ofstream outfile ("outputText.txt");
 
     outfile << "my text here!" << std::endl;
 

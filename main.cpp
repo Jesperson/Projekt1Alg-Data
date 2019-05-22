@@ -11,8 +11,6 @@ int main(){
 
 
 
-
-
 /*
         -----Implementation 3-----
     -Input från en fil
@@ -23,6 +21,10 @@ int main(){
 */
 
 /*
-    -
+    -----Output fil-----
+    std::ofstream outfile ("test.txt");
 
+    outfile << "my text here!" << std::endl;
+
+    outfile.close();
 */

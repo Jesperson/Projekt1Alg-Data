@@ -5,13 +5,13 @@ int readFile() {
 
  std::ifstream myFile;
  myFile.open("text.txt");
- char output[100];
+ char content[100];
  if (myFile.is_open()) {
  while (!myFile.eof()) {
 
 
-    myFile >> output;
-    std::cout << output;
+    myFile >> content;
+    std::cout << content;
 
 
  }

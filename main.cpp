@@ -27,7 +27,7 @@ int readFile() {
 myFile.close();
 return 0;
 }
-
+//nodeEdge kollar hur många noder som har udda kanter
 void checkEuler(){
     if(int nodeEdge >= 2){
         std::cout << "No path available."

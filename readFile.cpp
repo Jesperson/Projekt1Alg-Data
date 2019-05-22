@@ -4,15 +4,14 @@
 int readFile() {
 
  std::ifstream myFile;
- myFile.open("text.txt");
- char content[100];
+ std::string fileName = argv[1];
+ myFile.open(argv[1]);
+ char input[100];
  if (myFile.is_open()) {
  while (!myFile.eof()) {
 
-
-    myFile >> content;
-    std::cout << content;
-
+    myFile >> input;
+    std::cout << input;
 
  }
 }

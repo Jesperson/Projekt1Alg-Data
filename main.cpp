@@ -1,32 +1,58 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-
+#include <sstream>
+#include <vector>
 int readFile(){};
 
-int main(){
-std::string fileName = argv[1];
-int contentSize = 10;
-char(*ary)[10] = new char[contentSize][10];
+using namespace std;
+int main(int argc, char *argv[])
+{
 
+   ifstream myFile;
+   string fileName = argv[1];
+   vector<string> node;
+   string line;
+   int n = -1;
+
+   myFile.open(argv[1]);
+   if (myFile.is_open())
+   {
+
+      cout << "opened the file" << endl;
+
+      while (getline(myFile, line))
+      {
+         //myFile >> node[n];
+
+         //node[n] = line;
+         if (line.size() == 0)
+         {
+            cout << "found empty line, breaking." << endl;
+            break;
+         }
+         else if (n == -1){
+            cout << "First line found" << endl;
+            n++;
+            continue;
+         }
+         else
+         {
+            cout << line + " ";
+            node.push_back(line);
+            cout << node[n] << endl;
+            n++;
+         }
+      }
+   }
+   else
+   {
+      cout << "File not found.";
+   }
+   myFile.close();
+   return 0;
 }
 
-int readFile() {
-
- std::ifstream myFile;
- myFile.open(argv[1]);
- char input[100];
- if (myFile.is_open()) {
- while (!myFile.eof()) {
-
-    myFile >> input;
-    std::cout << input;
-
- }
-}
-myFile.close();
-return 0;
-}
 //nodeEdge kollar hur många noder som har udda kanter
 void checkEuler(){
     if(int nodeEdge >= 2){

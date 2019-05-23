@@ -1,64 +1,127 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <sstream>
 #include <vector>
-int readFile(){};
-
 using namespace std;
+int readFile(){};
+int compareStringToVector(string comparison, vector<string> vectorWithNodes, int n);
+vector<string> test(vector<string> swag);
+
 int main(int argc, char *argv[])
 {
 
-   ifstream myFile;
-   string fileName = argv[1];
-   vector<string> node;
-   string line;
-   int n = -1;
+	ifstream myFile;
+	string fileName = argv[1];
+	vector<string> nodes;
+	vector<vector<string>> connected;
+	//vector<string> *ptrNodes = new vector<string>[]; DEKLARERA
+	string line;
+	bool emptyLineFound = false;
+	int n = -1;
+	test(nodes);
+	myFile.open(argv[1]);
+	if (myFile.is_open())
+	{
 
-   myFile.open(argv[1]);
-   if (myFile.is_open())
-   {
+		cout << "opened the file" << endl;
 
-      cout << "opened the file" << endl;
+		while (getline(myFile, line))
+		{
+			if (line.size() == 0)
+			{
+				cout << "found empty line" << endl;
+				emptyLineFound = true;
+			}
 
-      while (getline(myFile, line))
-      {
-         //myFile >> node[n];
+			else if (n == -1)
+			{
+				cout << "First line found" << endl;
+				n++;
+				continue;
+			}
+			else if (emptyLineFound == true)
+			{
+				cout << "emptyLineFound = true" << endl;
+				break; //change the way input is taken here
+			}
+			else
+			{
+				cout << line + " ";
+				nodes.push_back(line);
+				cout << nodes[n] << endl;
+				n++;
+			}
+		}
+		//change input method to handle ex. Alpha'\t'Gamma'\t'2
+		int valueOnColumn = 0;
+		int nodeX = 0;
+		int nodeY = 0;
+		while (myFile >> line)
+		{
+			if (valueOnColumn == 0)
+			{
+				nodeX = compareStringToVector(line, nodes, n);
+				valueOnColumn = 1;
+			}
+			else if (valueOnColumn == 1){
+				nodeY = compareStringToVector(line, nodes, n);
+				valueOnColumn = 2;
+			}
+			else if (valueOnColumn == 2){
+				/*for (int n = 0; n <= nodes.size(); n++)
+				{
+					connected[nodeX][n] = nodes[nodeY];
+					*ptrNodes[nodeX]->nodes[nodeY];
+				};*/
+				cout << "made it to else-if 2 chief" << endl;
+				valueOnColumn = 0;
+				nodeX = 0;
+				nodeY = 0;
+			}
+		}
+	}
+	else
+	{
+		cout << "File not found.";
+	}
+	for (int i = 0; i < n; i++)
+	{
+		cout << nodes[i] << " ";
+	}
 
-         //node[n] = line;
-         if (line.size() == 0)
-         {
-            cout << "found empty line, breaking." << endl;
-            break;
-         }
-         else if (n == -1){
-            cout << "First line found" << endl;
-            n++;
-            continue;
-         }
-         else
-         {
-            cout << line + " ";
-            node.push_back(line);
-            cout << node[n] << endl;
-            n++;
-         }
-      }
-   }
-   else
-   {
-      cout << "File not found.";
-   }
-   myFile.close();
-   return 0;
+	myFile.close();
+	return 0;
 }
+
+int compareStringToVector(string comparison, vector<string> vectorWithNodes, int n)
+{
+	cout << "Made it into the function, all good chief." << endl;
+	int caseNr = -1;
+	for (int y = 0; y < n; y++)
+	{
+		if (vectorWithNodes[y] == comparison)
+		{
+			caseNr = y;
+		}
+	}
+	if (caseNr == -1)
+	{
+		cout << "Something went wrong chief... sorry boot dat." << endl;
+	}
+	return caseNr;
+}
+
+vector<string> test(vector<string> swag){
+	
+	return ;
+}
+
 
 //nodeEdge kollar hur många noder som har udda kanter
 void checkEuler(){
     if(int nodeEdge >= 2){
-        std::cout << "No path available."
-    };
-
+        std::cout << "No path available.";
+    }
 }
 
 

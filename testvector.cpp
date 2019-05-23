@@ -1,29 +1,36 @@
 #include <iostream>
 #include <vector>
-#include <list>
 
 int nodAntal(){};
 int readFile(int n, std::string fileName){};
+int writeFile(){};
 
 int main(std::string fileName)
 {
-    std::vector<int> nodes(int limit_arr);
-};
+    std::vector<std::vector<char>> nodes;
 
-int readFile(int n, std::string argv[1])
-{
-    int limit_arr;
-    std::ifstream fileInput;
-    fileInput.open(argv[1]);
-    if (fileInput.is_open())
-    {
-        while (!fileInput.eof())
-        {
-
-            fileInput >> nodes(limit_arr);
-            std::cout << input;
-        };
-    }
-    fileInput.close();
-    return 0;
 }
+
+ //Läser noderna separat
+int readFile(int n, std::string argv[1])
+    {
+        std::string line;
+        std::vector<std::string> myVector;
+
+        std::istringstream iss(line);
+        while (getline(f, line))
+        {
+            if (!line.size())
+                break;
+            myVector.push_back(std::move(line));
+        }
+    }
+
+    int writeFile()
+    {
+        std::ofstream outputFile("Output.txt");
+        for (int n = 0; n <= limit_arr; n++)
+        {
+            outputFile << nodes[i] << "->" << &nodes[i]
+        }
+    }

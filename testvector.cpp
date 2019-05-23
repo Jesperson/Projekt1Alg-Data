@@ -8,29 +8,43 @@ int writeFile(){};
 int main(std::string fileName)
 {
     std::vector<std::vector<char>> nodes;
-
 }
 
- //Läser noderna separat
+//Läser noderna separat
 int readFile(int n, std::string argv[1])
-    {
-        std::string line;
-        std::vector<std::string> myVector;
+{
+    std::string line;
+    std::vector<std::string> myVector;
 
-        std::istringstream iss(line);
-        while (getline(f, line))
-        {
-            if (!line.size())
-                break;
-            myVector.push_back(std::move(line));
-        }
+    std::istringstream iss(line);
+    while (getline(f, line))
+    {
+        if (!line.size())
+            break;
+        myVector.push_back(std::move(line));
+    }
+}
+
+int writeFile()
+{
+    std::ofstream outputFile("Output.txt");
+    for (int n = 0; n <= limit_arr; n++)
+    {
+        outputFile << nodes[i] << "->" << &nodes[i]
+    }
+}
+
+/*
+
+int main(argv[1]){
+int n = 1;
+    ifstream fileName(argv[1])
+
+    std::vector<std::string> node;
+
+    while(fileName >> node[n]){
+        for(n = 1, n < node.max, n++)
     }
 
-    int writeFile()
-    {
-        std::ofstream outputFile("Output.txt");
-        for (int n = 0; n <= limit_arr; n++)
-        {
-            outputFile << nodes[i] << "->" << &nodes[i]
-        }
-    }
+  
+}

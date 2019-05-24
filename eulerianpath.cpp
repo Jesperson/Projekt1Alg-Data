@@ -1,160 +1,216 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <list>
+#include <vector>
 
-// A C++ program to check if a given graph is Eulerian or not 
-#include<iostream> 
-#include <list> 
-using namespace std; 
-  
-// A class that represents an undirected graph 
-class Graph 
-{ 
-    int V;    // No. of vertices 
-    list<int> *adj;    // A dynamic array of adjacency lists 
-public: 
-    // Constructor and destructor 
-    Graph(int V)   {this->V = V; adj = new list<int>[V]; } 
-    ~Graph() { delete [] adj; } // To avoid memory leak 
-  
-     // function to add an edge to graph 
-    void addEdge(int v, int w); 
-  
-    // Method to check if this graph is Eulerian or not 
-    int isEulerian(); 
-  
-    // Method to check if all non-zero degree vertices are connected 
-    bool isConnected(); 
-  
-    // Function to do DFS starting from v. Used in isConnected(); 
-    void DFSUtil(int v, bool visited[]); 
-}; 
-  
-void Graph::addEdge(int v, int w) 
-{ 
-    adj[v].push_back(w); 
-    adj[w].push_back(v);  // Note: the graph is undirected 
-} 
-  
-void Graph::DFSUtil(int v, bool visited[]) 
-{ 
-    // Mark the current vertex as visited and print it 
-    visited[v] = true; 
-  
-    // Recur for all the vertices adjacent to this vertex 
-    list<int>::iterator i; 
-    for (i = adj[v].begin(); i != adj[v].end(); ++i) 
-        if (!visited[*i]) 
-            DFSUtil(*i, visited); 
-} 
-  
-// Method to check if all non-zero degree vertices are connected. 
-// It mainly does DFS traversal starting from 
-bool Graph::isConnected() 
-{ 
-    // Mark all the vertices as not visited 
-    bool visited[V]; 
-    int i; 
-    for (i = 0; i < V; i++) 
-        visited[i] = false; 
-  
-    // Find a vertex with non-zero degree 
-    for (i = 0; i < V; i++) 
-        if (adj[i].size() != 0) 
-            break; 
-  
-    // If there are no edges in the graph, return true 
-    if (i == V) 
-        return true; 
-  
-    // Start DFS traversal from a vertex with non-zero degree 
-    DFSUtil(i, visited); 
-  
-    // Check if all non-zero degree vertices are visited 
-    for (i = 0; i < V; i++) 
-       if (visited[i] == false && adj[i].size() > 0) 
-            return false; 
-  
-    return true; 
-} 
-  
-/* The function returns one of the following values 
-   0 --> If grpah is not Eulerian 
-   1 --> If graph has an Euler path (Semi-Eulerian) 
-   2 --> If graph has an Euler Circuit (Eulerian)  */
-int Graph::isEulerian() 
-{ 
-    // Check if all non-zero degree vertices are connected 
-    if (isConnected() == false) 
-        return 0; 
-  
-    // Count vertices with odd degree 
-    int odd = 0; 
-    for (int i = 0; i < V; i++) 
-        if (adj[i].size() & 1) 
-            odd++; 
-  
-    // If count is more than 2, then graph is not Eulerian 
-    if (odd > 2) 
-        return 0; 
-  
-    // If odd count is 2, then semi-eulerian. 
-    // If odd count is 0, then eulerian 
-    // Note that odd count can never be 1 for undirected graph 
-    return (odd)? 1 : 2; 
-} 
-  
-// Function to run test cases 
-void test(Graph &g) 
-{ 
-    int res = g.isEulerian(); 
-    if (res == 0) 
-        cout << "graph is not Eulerian\n"; 
-    else if (res == 1) 
-        cout << "graph has a Euler path\n"; 
-    else
-        cout << "graph has a Euler cycle\n"; 
-} 
-  
-// Driver program to test above function 
-int main() 
-{ 
-    // Let us create and test graphs shown in above figures 
-    Graph g1(5); 
-    g1.addEdge(1, 0); 
-    g1.addEdge(0, 2); 
-    g1.addEdge(2, 1); 
-    g1.addEdge(0, 3); 
-    g1.addEdge(3, 4); 
-    test(g1); 
-  
-    Graph g2(5); 
-    g2.addEdge(1, 0); 
-    g2.addEdge(0, 2); 
-    g2.addEdge(2, 1); 
-    g2.addEdge(0, 3); 
-    g2.addEdge(3, 4); 
-    g2.addEdge(4, 0); 
-    test(g2); 
-  
-    Graph g3(5); 
-    g3.addEdge(1, 0); 
-    g3.addEdge(0, 2); 
-    g3.addEdge(2, 1); 
-    g3.addEdge(0, 3); 
-    g3.addEdge(3, 4); 
-    g3.addEdge(1, 3); 
-    test(g3); 
-  
-    // Let us create a graph with 3 vertices 
-    // connected in the form of cycle 
-    Graph g4(3); 
-    g4.addEdge(0, 1); 
-    g4.addEdge(1, 2); 
-    g4.addEdge(2, 0); 
-    test(g4); 
-  
-    // Let us create a graph with all veritces 
-    // with zero degree 
-    Graph g5(3); 
-    test(g5); 
-  
-    return 0; 
-} 
+using namespace std;
+
+class representGraph
+{
+private:
+	int n;
+	list<int> *adjacencyMatrix;
+
+public:
+	representGraph(int n)
+	{
+		this->n = n;
+		adjacencyMatrix = new list<int>[n];
+	}
+	~representGraph() { delete[] adjacencyMatrix; }
+
+	void connectNodes(int x, int y);
+	void DFSFunction(int n, bool visited[]); //DFS was the easiest algorithm to implement a graph, and that's why we decided to use this.
+	bool checkAllConnections();
+	bool pathAvailable(); //add int list as parameter here <3
+	void outputResultToFile(string result, bool possible);
+	void test(representGraph &g);
+};
+
+void representGraph::connectNodes(int x, int y)
+{
+	cout << "Connecting node: " << x << " with node " << y << endl;
+	adjacencyMatrix[x].push_back(y); 
+	adjacencyMatrix[y].push_back(x);
+}
+
+void representGraph::DFSFunction(int nodeX, bool visited[])
+{
+	visited[nodeX] = true;
+
+	list<int>::iterator i;
+	for (i = adjacencyMatrix[nodeX].begin(); i != adjacencyMatrix[nodeX].end(); i++){
+		if (!visited[*i]){
+			DFSFunction(*i, visited);
+		}
+	}
+}
+bool representGraph::checkAllConnections(){
+	cout << "Made it to the connection func. " << endl;
+	bool connected;
+	bool visited[n];
+	int i;
+	for (i = 0; i < n; i++){
+		visited[i] = false;
+	}
+	cout << n << endl;
+	/*for (i = 0; i < n; i++){
+		cout 
+	}*/
+	for (i = 0; i < n; i++){
+		if (adjacencyMatrix[i].size() != 0){
+			cout << "found a list with a size of 0 at place number:  " << i << endl;
+			break;
+		}
+	}
+	if (i == n){
+		connected = true;
+	}
+
+	DFSFunction(i, visited);
+
+	for (i = 0; i < n; i++){
+		if (visited[i] == false && adjacencyMatrix[i].size() > 0){
+			connected = false;
+		}
+	}
+	cout << "result from connection func: " << connected << endl;
+	return connected;
+}
+
+bool representGraph::pathAvailable(){ //add list as parameter here <3
+
+	int possible = -1;
+	string result;
+	//checks if all non-isolated nodes are connected to eachother, aka not 2 graphs or similar problems
+	if(checkAllConnections() == false){
+		possible = 0;
+	}
+	
+	//checks for the number of odd nodes, using the size of the list of nodes connected to a certain node
+	int odd = 0;
+	for (int i = 0; i < n; i++){
+		if (adjacencyMatrix[i].size() % 2 == 1){
+			odd++;
+		}
+	}
+	//checks if the graph has more than 2 odd nodes, it is impossible to solve.
+	if (odd > 2){
+		possible = 0;
+		result = "2\nNO PATH FOUND";
+		cout << result;
+	}
+	return possible;
+}
+void representGraph::outputResultToFile(string result, bool possible){
+	//output 
+}
+void representGraph::test(representGraph &g){
+	int res = g.pathAvailable();
+}
+int compareStringToVector(string comparison, vector<string> vectorWithNodes, int n);
+int main(int argc, char *argv[])
+{
+
+	ifstream myFile;
+	string fileName = argv[1];
+	vector<string> nodes;
+	list<int> nodesInt;
+	//list<vector<string>> connected;
+
+	string line;
+	bool emptyLineFound = false;
+	int n = -1;
+	
+	//test(nodes);
+	myFile.open(argv[1]);
+	if (myFile.is_open())
+	{
+
+		cout << "opened the file" << endl;
+
+		while (emptyLineFound == false)
+		{
+			getline(myFile, line);
+			if (line.size() == 0)
+			{
+				cout << "found empty line" << endl;
+				emptyLineFound = true;
+			}
+
+			else if (n == -1)
+			{
+				cout << "First line found" << endl;
+				n++;
+				continue;
+			}
+			else
+			{
+				nodes.push_back(line);
+				nodesInt.push_back(n);
+				cout << nodes[n] << endl;
+				n++;
+			}
+		}
+		//change input method to handle ex. Alpha'\t'Gamma'\t'2
+		representGraph graph1(n);
+		cout << endl;
+		int columnInFile = 0; //stående, hjälper datorn hålla koll vilken del av filen den jobbar med, och hanterar informationen därefter.
+		int nodeX = 0;
+		int nodeY = 0;
+		while (myFile >> line)
+		{
+			if (columnInFile == 0)
+			{
+
+				nodeX = compareStringToVector(line, nodes, n);
+				cout << "Name of node is: " << line << ", ";
+				columnInFile = 1;
+			}
+			else if (columnInFile == 1)
+			{
+				nodeY = compareStringToVector(line, nodes, n);
+				cout << " and the node it should connect to is: " << line << ". " << endl;
+				columnInFile = 2;
+			}
+			else if (columnInFile == 2)
+			{
+				graph1.connectNodes(nodeX, nodeY);
+				//cout << line << endl;
+				columnInFile = 0;
+				nodeX = 0;
+				nodeY = 0;
+			}
+		}
+		graph1.test(graph1);
+	}
+	else
+	{
+		cout << "File not found.";
+	}
+	for (int i = 0; i < n; i++)
+	{
+		cout << nodes[i] << " ";
+	}
+
+	myFile.close();
+	return 0;
+}
+
+int compareStringToVector(string comparison, vector<string> vectorWithNodes, int n)
+{
+	int caseNr = -1;
+	for (int y = 0; y < n; y++)
+	{
+		if (vectorWithNodes[y] == comparison)
+		{
+			caseNr = y;
+		}
+	}
+	if (caseNr == -1)
+	{
+		cout << "Something went wrong chief... sorry boot dat." << endl;
+	}
+	return caseNr;
+}

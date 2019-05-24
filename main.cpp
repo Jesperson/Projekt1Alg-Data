@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <list>
 #include <vector>
 
 using namespace std;
@@ -9,13 +10,13 @@ class representGraph
 {
 private:
 	int n;
-	vector<string> *adjacencyMatrix;
+	list<string> *adjacencyMatrix;
 
 public:
 	representGraph(int n)
 	{
 		this->n = n;
-		adjacencyMatrix = new vector<string>[n];
+		adjacencyMatrix = new list<string>[n];
 	}
 	~representGraph() { delete[] adjacencyMatrix; }
 
@@ -35,7 +36,7 @@ void representGraph::DFSUtil(int nodeX, bool visited[])
 {
 	visited[nodeX] = true;
 
-	vector<string>::iterator i;
+	list<string>::iterator i;
 	for (i = adjacencyMatrix[nodeX].begin(); i != adjacencyMatrix[nodeX].end(); i++){
 		if (!visited[*i]){
 			DFSUtil(*i, visited);
@@ -49,7 +50,7 @@ int main(int argc, char *argv[])
 	ifstream myFile;
 	string fileName = argv[1];
 	vector<string> nodes;
-	vector<vector<string>> connected;
+	//list<vector<string>> connected;
 
 	string line;
 	bool emptyLineFound = false;
@@ -154,6 +155,7 @@ int compareStringToVector(string comparison, vector<string> vectorWithNodes, int
 	}
 	return caseNr;
 }
+
 
 
 //nodeEdge kollar hur många noder som har udda kanter

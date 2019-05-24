@@ -33,6 +33,7 @@ void representGraph::connectNodes(int x, int y)
 	cout << "Connecting node: " << x << " with node " << y << endl;
 	adjacencyMatrix[x].push_back(y); 
 	adjacencyMatrix[y].push_back(x);
+	e++;
 }
 
 void representGraph::DFSFunction(int nodeX, bool visited[]) //change this to know that a road was used, not a node.
@@ -54,13 +55,13 @@ bool representGraph::checkAllConnections()
 {
 	cout << "Made it to the connection func. " << endl;
 	bool connected;
-	bool visited[n];
+	bool visited[e];
 	int i;
-	for (i = 0; i < n; i++)
+	for (i = 0; i < e; i++)
 	{
 		visited[i] = false;
 	}
-	cout << n << endl;
+	cout << e << endl;
 	/*for (i = 0; i < n; i++){
 		cout 
 	}*/

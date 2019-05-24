@@ -60,7 +60,7 @@ bool representGraph::checkAllConnections(){
 		cout 
 	}*/
 	for (i = 0; i < n; i++){
-		if (adjacencyMatrix[i].size() != 0){
+		if (adjacencyMatrix[i].size() == 0){
 			cout << "found a list with a size of " << adjacencyMatrix[i].size() << " at place number:  " << i << endl;
 			break;
 		}
@@ -91,8 +91,10 @@ bool representGraph::pathAvailable(){ //add list as parameter here <3
 	
 	//checks for the number of odd nodes, using the size of the list of nodes connected to a certain node
 	int odd = 0;
+	int oddNodes[n];
 	for (int i = 0; i < n; i++){
 		if (adjacencyMatrix[i].size() % 2 == 1){
+			oddNodes[odd] = i;
 			odd++;
 		}
 	}
@@ -100,15 +102,17 @@ bool representGraph::pathAvailable(){ //add list as parameter here <3
 	if (odd > 2){
 		possible = 0;
 		result = "2\nNO PATH FOUND";
+		outputResultToFile(result, possible);
 		cout << result;
 	}
 	return possible;
 }
 void representGraph::outputResultToFile(string result, bool possible){
-    ofstream outputFile;
-    outputFile.open("Output.txt");
-    outputFile << result;
-    outputFile.close();
+	cout << "made it into the output." << endl;
+	ofstream outputFile;
+	outputFile.open("Output.txt");
+	outputFile << result;
+	outputFile.close();
 }
 void representGraph::test(representGraph &g){
 	int res = g.pathAvailable();

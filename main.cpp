@@ -49,7 +49,6 @@ int main(int argc, char *argv[])
 		}
 		//change input method to handle ex. Alpha'\t'Gamma'\t'2
 		int columnInFile = 0;   //stående, hjälper datorn hålla koll vilken del av filen den jobbar med, och hanterar informationen därefter.
-		int rowInFile = -1 - n; //liggande, ser till att programmet börjar hantera input efter UNDIRECTED, samt listan med noder.
 		int nodeX = 0;
 		int nodeY = 0;
 		//cout << "Irrelevant lines: " << line;

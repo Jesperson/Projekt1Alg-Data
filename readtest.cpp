@@ -21,7 +21,7 @@ public:
 	~representGraph() { delete[] adjacencyMatrix; }
 
 	void connectNodes(int x, int y);
-	void DFSUtil(int n, bool visited[]); //DFS was the easiest algorithm to implement a graph, and that's why we decided to use this.
+	void DFSFunction(int n, bool visited[]); //DFS was the easiest algorithm to implement a graph, and that's why we decided to use this.
 	bool checkAllConnections();
 	int pathAvailable();
 };
@@ -32,14 +32,14 @@ void representGraph::connectNodes(int x, int y)
 	adjacencyMatrix[y].push_back(x);
 }
 
-void representGraph::DFSUtil(int nodeX, bool visited[])
+void representGraph::DFSFunction(int nodeX, bool visited[])
 {
 	visited[nodeX] = true;
 
 	list<int>::iterator i;
 	for (i = adjacencyMatrix[nodeX].begin(); i != adjacencyMatrix[nodeX].end(); i++){
 		if (!visited[*i]){
-			DFSUtil(*i, visited);
+			DFSFunction(*i, visited);
 		}
 	}
 }
@@ -56,6 +56,7 @@ int main(int argc, char *argv[])
 	string line;
 	bool emptyLineFound = false;
 	int n = -1;
+	
 	//test(nodes);
 	myFile.open(argv[1]);
 	if (myFile.is_open())
@@ -87,6 +88,7 @@ int main(int argc, char *argv[])
 			}
 		}
 		//change input method to handle ex. Alpha'\t'Gamma'\t'2
+		representGraph graph1(n);
 		cout << endl;
 		int columnInFile = 0; //stående, hjälper datorn hålla koll vilken del av filen den jobbar med, och hanterar informationen därefter.
 		int nodeX = 0;
@@ -108,7 +110,7 @@ int main(int argc, char *argv[])
 			}
 			else if (columnInFile == 2)
 			{
-				sadaf
+				graph1.connectNodes(nodeX, nodeY);
 				//cout << line << endl;
 				columnInFile = 0;
 				nodeX = 0;

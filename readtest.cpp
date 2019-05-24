@@ -31,18 +31,20 @@ public:
 void representGraph::connectNodes(int x, int y)
 {
 	cout << "Connecting node: " << x << " with node " << y << endl;
-	adjacencyMatrix[x].push_back(y); 
+	adjacencyMatrix[x].push_back(y); //change these back!
 	adjacencyMatrix[y].push_back(x);
 }
 
 void representGraph::DFSFunction(int nodeX, bool visited[])
 {
-	cout << "Made it into the DFSFunction." << endl;
+	cout << "Made it into the DFSFunction, with nodeX value as: " << nodeX << endl;
 	visited[nodeX] = true;
-
+	int dummycounter = 0;
 	list<int>::iterator i;
 	for (i = adjacencyMatrix[nodeX].begin(); i != adjacencyMatrix[nodeX].end(); i++){
 		if (!visited[*i]){
+			
+			dummycounter++;
 			DFSFunction(*i, visited);
 		}
 	}
@@ -60,8 +62,7 @@ bool representGraph::checkAllConnections(){
 		cout 
 	}*/
 	for (i = 0; i < n; i++){
-		if (adjacencyMatrix[i].size() == 0){
-			cout << "found a list with a size of " << adjacencyMatrix[i].size() << " at place number:  " << i << endl;
+		if (adjacencyMatrix[i].size() != 0){
 			break;
 		}
 	}

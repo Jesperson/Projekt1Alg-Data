@@ -92,7 +92,7 @@ bool representGraph::pathAvailable()
 { //add list as parameter here <3
 
 	int possible = -1;
-	string result;
+	string result = "tom";
 	//checks if all non-isolated nodes are connected to eachother, aka not 2 graphs or similar problems
 	if (checkAllConnections() == false)
 	{

@@ -62,6 +62,7 @@ void representGraph::DFSFunction(int nodeX, int visited[]) //change this to know
 	else
 	{
 		visited[nodeX]++;
+        k = 0;
 		list<int>::iterator i;
 		for (i = adjacencyMatrix[nodeX].begin(); k <= e; k++)
 		{

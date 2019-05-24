@@ -9,7 +9,8 @@ using namespace std;
 class representGraph
 {
 private:
-	int n, e;
+	int n;
+    int e = 0;
 	list<int> *adjacencyMatrix;
 
 public:
@@ -56,7 +57,6 @@ bool representGraph::checkAllConnections()
 {
 	cout << "Made it to the connection func. " << endl;
 	bool connected = true;
-    cout << e;
 	bool visited[e];
 	int i;
 	for (i = 0; i < e; i++)

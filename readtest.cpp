@@ -179,6 +179,7 @@ int main(int argc, char *argv[])
 	return 0;
 }
 
+
 int compareStringToVector(string comparison, vector<string> vectorWithNodes, int n)
 {
 	int caseNr = -1;

@@ -56,6 +56,7 @@ bool representGraph::checkAllConnections()
 {
 	cout << "Made it to the connection func. " << endl;
 	bool connected = true;
+	cout << e << endl;
 	bool visited[e];
 	int i;
 	for (i = 0; i < e; i++)

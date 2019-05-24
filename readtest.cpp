@@ -43,7 +43,55 @@ void representGraph::DFSFunction(int nodeX, bool visited[])
 		}
 	}
 }
+bool representGraph::checkAllConnections(){
+	bool connected;
+	bool visited[n];
+	int i;
+	for (i = 0; i < n; i++){
+		visited[i] = false;
+	}
 
+	for (i = 0; i < n; i++){
+		if (adjacencyMatrix[i].size() != 0){
+			break;
+		}
+	}
+	if (i == n){
+		connected = true;
+	}
+
+	DFSFunction(i, visited);
+
+	for (i = 0; i < n; i++){
+		if (visited[i] == false && adjacencyMatrix[i].size() > 0){
+			connected = false;
+		}
+	}
+	return connected;
+}
+
+int representGraph::pathAvailable(){
+
+	int possible = -1;
+	//checks if all non-isolated nodes are connected to eachother, aka not 2 graphs or similar problems
+	if(checkAllConnections() == false){
+		possible = 0;
+	}
+	
+	//checks for the number of odd nodes, using the size of the list of nodes connected to a certain node
+	int odd = 0;
+	for (int i = 0; i < n; i++){
+		if (adjacencyMatrix[i].size() % 2 == 1){
+			odd++;
+		}
+	}
+	//checks if the graph has more than 2 odd nodes, it is impossible to solve.
+	if (odd > 2){
+		possible = 0;
+	}
+	return possible;
+}
+int compareStringToVector(string comparison, vector<string> vectorWithNodes, int n);
 int main(int argc, char *argv[])
 {
 
@@ -130,7 +178,7 @@ int main(int argc, char *argv[])
 	myFile.close();
 	return 0;
 }
-int compareStringToVector(string comparison, vector<string> vectorWithNodes, int n);
+
 int compareStringToVector(string comparison, vector<string> vectorWithNodes, int n)
 {
 	int caseNr = -1;

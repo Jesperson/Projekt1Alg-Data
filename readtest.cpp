@@ -10,33 +10,33 @@ class representGraph
 {
 private:
 	int n;
-	list<string> *adjacencyMatrix;
+	list<int> *adjacencyMatrix;
 
 public:
 	representGraph(int n)
 	{
 		this->n = n;
-		adjacencyMatrix = new list<string>[n];
+		adjacencyMatrix = new list<int>[n];
 	}
 	~representGraph() { delete[] adjacencyMatrix; }
 
-	void connectNodes(int x, int y, string xNode, string yNode);
+	void connectNodes(int x, int y);
 	void DFSUtil(int n, bool visited[]); //DFS was the easiest algorithm to implement a graph, and that's why we decided to use this.
 	bool checkAllConnections();
 	int pathAvailable();
 };
 
-void representGraph::connectNodes(int x, int y, string xNode, string yNode)
+void representGraph::connectNodes(int x, int y)
 {
-	adjacencyMatrix[x].push_back(yNode);
-	adjacencyMatrix[y].push_back(xNode);
+	adjacencyMatrix[x].push_back(y);
+	adjacencyMatrix[y].push_back(x);
 }
 
 void representGraph::DFSUtil(int nodeX, bool visited[])
 {
 	visited[nodeX] = true;
 
-	list<string>::iterator i;
+	list<int>::iterator i;
 	for (i = adjacencyMatrix[nodeX].begin(); i != adjacencyMatrix[nodeX].end(); i++){
 		if (!visited[*i]){
 			DFSUtil(*i, visited);
@@ -50,6 +50,7 @@ int main(int argc, char *argv[])
 	ifstream myFile;
 	string fileName = argv[1];
 	vector<string> nodes;
+	list<int> nodesInt;
 	//list<vector<string>> connected;
 
 	string line;
@@ -80,20 +81,13 @@ int main(int argc, char *argv[])
 			else
 			{
 				nodes.push_back(line);
+				nodesInt.push_back(n);
 				cout << nodes[n] << endl;
 				n++;
 			}
 		}
 		//change input method to handle ex. Alpha'\t'Gamma'\t'2
-		vector<string> ptrNodes;
-		ptrNodes = nodes;
-		/*for (int j = 0; j < n; j++)
-		{
-			cout << " in ptrNodes there is: " << ptrNodes[j] << ", ";
-			string *ptr = ptrNodes[j];
-		}*/
 		cout << endl;
-
 		int columnInFile = 0; //stående, hjälper datorn hålla koll vilken del av filen den jobbar med, och hanterar informationen därefter.
 		int nodeX = 0;
 		int nodeY = 0;
@@ -114,11 +108,7 @@ int main(int argc, char *argv[])
 			}
 			else if (columnInFile == 2)
 			{
-				/*for (int n = 0; n <= nodes.size(); n++)
-				{
-					connected[nodeX][n] = nodes[nodeY];
-					*ptrNodes[nodeX]->nodes[nodeY];
-				};*/
+				sadaf
 				//cout << line << endl;
 				columnInFile = 0;
 				nodeX = 0;

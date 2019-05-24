@@ -4,8 +4,44 @@
 #include <vector>
 
 using namespace std;
-int compareStringToVector(string comparison, vector<string> vectorWithNodes, int n);
-//vector<string> test(vector<string> swag);
+
+class representGraph
+{
+private:
+	int n;
+	vector<string> *adjacencyMatrix;
+
+public:
+	representGraph(int n)
+	{
+		this->n = n;
+		adjacencyMatrix = new vector<string>[n];
+	}
+	~representGraph() { delete[] adjacencyMatrix; }
+
+	void connectNodes(int x, int y, string xNode, string yNode);
+	void DFSUtil(int n, bool visited[]); //DFS was the easiest algorithm to implement a graph, and that's why we decided to use this.
+	bool checkAllConnections();
+	int pathAvailable();
+};
+
+void representGraph::connectNodes(int x, int y, string xNode, string yNode)
+{
+	adjacencyMatrix[x].push_back(yNode);
+	adjacencyMatrix[y].push_back(xNode);
+}
+
+void representGraph::DFSUtil(int nodeX, bool visited[])
+{
+	visited[nodeX] = true;
+
+	vector<string>::iterator i;
+	for (i = adjacencyMatrix[nodeX].begin(); i != adjacencyMatrix[nodeX].end(); i++){
+		if (!visited[*i]){
+			DFSUtil(*i, visited);
+		}
+	}
+}
 
 int main(int argc, char *argv[])
 {
@@ -14,7 +50,7 @@ int main(int argc, char *argv[])
 	string fileName = argv[1];
 	vector<string> nodes;
 	vector<vector<string>> connected;
-	//vector<string> *ptrNodes = new vector<string>[]; DEKLARERA
+
 	string line;
 	bool emptyLineFound = false;
 	int n = -1;
@@ -48,25 +84,35 @@ int main(int argc, char *argv[])
 			}
 		}
 		//change input method to handle ex. Alpha'\t'Gamma'\t'2
-		int columnInFile = 0;   //stående, hjälper datorn hålla koll vilken del av filen den jobbar med, och hanterar informationen därefter.
+		vector<string> ptrNodes;
+		ptrNodes = nodes;
+		/*for (int j = 0; j < n; j++)
+		{
+			cout << " in ptrNodes there is: " << ptrNodes[j] << ", ";
+			string *ptr = ptrNodes[j];
+		}*/
+		cout << endl;
+
+		int columnInFile = 0; //stående, hjälper datorn hålla koll vilken del av filen den jobbar med, och hanterar informationen därefter.
 		int nodeX = 0;
 		int nodeY = 0;
-		//cout << "Irrelevant lines: " << line;
 		while (myFile >> line)
 		{
 			if (columnInFile == 0)
 			{
+
 				nodeX = compareStringToVector(line, nodes, n);
-				//cout << "comparing string to vector. Name of node is: " << line << ", ";
-				cout << "Node on the left is: " << line;
+				cout << "comparing string to vector. Name of node is: " << line << ", ";
 				columnInFile = 1;
 			}
-			else if (columnInFile == 1){
+			else if (columnInFile == 1)
+			{
 				nodeY = compareStringToVector(line, nodes, n);
 				cout << " and the node it should connect to is: " << line << ". " << endl;
 				columnInFile = 2;
 			}
-			else if (columnInFile == 2){
+			else if (columnInFile == 2)
+			{
 				/*for (int n = 0; n <= nodes.size(); n++)
 				{
 					connected[nodeX][n] = nodes[nodeY];
@@ -91,7 +137,7 @@ int main(int argc, char *argv[])
 	myFile.close();
 	return 0;
 }
-
+int compareStringToVector(string comparison, vector<string> vectorWithNodes, int n);
 int compareStringToVector(string comparison, vector<string> vectorWithNodes, int n)
 {
 	int caseNr = -1;
@@ -108,11 +154,6 @@ int compareStringToVector(string comparison, vector<string> vectorWithNodes, int
 	}
 	return caseNr;
 }
-
-/*vector<string> test(vector<string> swag){
-	
-	return ;
-}*/
 
 
 //nodeEdge kollar hur många noder som har udda kanter

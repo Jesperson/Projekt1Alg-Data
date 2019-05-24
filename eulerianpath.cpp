@@ -35,7 +35,7 @@ void Graph::addEdge(int v, int w)
   
 void Graph::DFSUtil(int v, bool visited[]) 
 { 
-    // Mark the current node as visited and print it 
+    // Mark the current vertex as visited and print it 
     visited[v] = true; 
   
     // Recur for all the vertices adjacent to this vertex 

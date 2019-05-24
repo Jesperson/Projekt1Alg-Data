@@ -105,7 +105,10 @@ bool representGraph::pathAvailable(){ //add list as parameter here <3
 	return possible;
 }
 void representGraph::outputResultToFile(string result, bool possible){
-	//output 
+    ofstream outputFile;
+    outputFile.open("Output.txt");
+    outputFile << result;
+    outputFile.close();
 }
 void representGraph::test(representGraph &g){
 	int res = g.pathAvailable();

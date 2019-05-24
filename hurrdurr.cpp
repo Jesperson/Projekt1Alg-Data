@@ -13,6 +13,7 @@ private:
 	int e = 0;
 	list<int> *adjacencyMatrix;
 	list<int> edges;
+	string result;
 
 public:
 	representGraph(int n)
@@ -54,6 +55,7 @@ void representGraph::DFSFunction(int nodeX, int visited[]) //change this to know
 			{
 
 				DFSFunction(*i, visited);
+				result.insert += adjacencyMatrix[nodeX];
 			}
 		}
 	}
@@ -117,7 +119,6 @@ bool representGraph::pathAvailable()
 { //add list as parameter here <3
 
 	int possible = -1;
-	string result;
 	//checks if all non-isolated nodes are connected to eachother, aka not 2 graphs or similar problems
 	if (checkAllConnections() == false)
 	{

@@ -117,13 +117,13 @@ int compareStringToVector(string comparison, vector<string> vectorWithNodes, int
 
 
 //nodeEdge kollar hur många noder som har udda kanter
-void checkEuler()
+/*void checkEuler()
 {
    if (int nodeEdge >= 2)
    {
       std::cout << "No path available.";
    }
-}
+}*/
 
 /*
     -Input från en fil, dynamisk char/string array? alternativt vektor/er.

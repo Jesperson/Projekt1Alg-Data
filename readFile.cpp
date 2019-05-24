@@ -45,10 +45,10 @@ int main(int argc, char *argv[])
          }
       };
 
-      switchFunc(nodeX, nodeY){
+      pointerFunction(nodeX, nodeY){
          for(int n = 0; n <= nodes.size(); n++){
-            connected[x][n] = nodes[y];
-            *nodes[x] -> nodes[y];
+            connected[nodeX][n] = nodes[nodeY];
+            *nodes[nodeX] -> nodes[nodeY];
          }
 
       }

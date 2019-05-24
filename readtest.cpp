@@ -23,12 +23,15 @@ public:
 	void connectNodes(int x, int y);
 	void DFSFunction(int n, bool visited[]); //DFS was the easiest algorithm to implement a graph, and that's why we decided to use this.
 	bool checkAllConnections();
-	int pathAvailable();
+	bool pathAvailable(); //add int list as parameter here <3
+	void outputResultToFile(string result, bool possible);
+	void test(representGraph &g);
 };
 
 void representGraph::connectNodes(int x, int y)
 {
-	adjacencyMatrix[x].push_back(y);
+	cout << "Connecting node: " << x << " with node " << y << endl;
+	adjacencyMatrix[x].push_back(y); 
 	adjacencyMatrix[y].push_back(x);
 }
 
@@ -44,15 +47,20 @@ void representGraph::DFSFunction(int nodeX, bool visited[])
 	}
 }
 bool representGraph::checkAllConnections(){
+	cout << "Made it to the connection func. " << endl;
 	bool connected;
 	bool visited[n];
 	int i;
 	for (i = 0; i < n; i++){
 		visited[i] = false;
 	}
-
+	cout << n << endl;
+	/*for (i = 0; i < n; i++){
+		cout 
+	}*/
 	for (i = 0; i < n; i++){
 		if (adjacencyMatrix[i].size() != 0){
+			cout << "found a list with a size of 0 at place number:  " << i << endl;
 			break;
 		}
 	}
@@ -67,12 +75,14 @@ bool representGraph::checkAllConnections(){
 			connected = false;
 		}
 	}
+	cout << "result from connection func: " << connected << endl;
 	return connected;
 }
 
-int representGraph::pathAvailable(){
+bool representGraph::pathAvailable(){ //add list as parameter here <3
 
 	int possible = -1;
+	string result;
 	//checks if all non-isolated nodes are connected to eachother, aka not 2 graphs or similar problems
 	if(checkAllConnections() == false){
 		possible = 0;
@@ -88,8 +98,16 @@ int representGraph::pathAvailable(){
 	//checks if the graph has more than 2 odd nodes, it is impossible to solve.
 	if (odd > 2){
 		possible = 0;
+		result = "2\nNO PATH FOUND";
+		cout << result;
 	}
 	return possible;
+}
+void representGraph::outputResultToFile(string result, bool possible){
+	//output 
+}
+void representGraph::test(representGraph &g){
+	int res = g.pathAvailable();
 }
 int compareStringToVector(string comparison, vector<string> vectorWithNodes, int n);
 int main(int argc, char *argv[])
@@ -147,7 +165,7 @@ int main(int argc, char *argv[])
 			{
 
 				nodeX = compareStringToVector(line, nodes, n);
-				cout << "comparing string to vector. Name of node is: " << line << ", ";
+				cout << "Name of node is: " << line << ", ";
 				columnInFile = 1;
 			}
 			else if (columnInFile == 1)
@@ -165,6 +183,7 @@ int main(int argc, char *argv[])
 				nodeY = 0;
 			}
 		}
+		graph1.test(graph1);
 	}
 	else
 	{
@@ -178,7 +197,6 @@ int main(int argc, char *argv[])
 	myFile.close();
 	return 0;
 }
-
 
 int compareStringToVector(string comparison, vector<string> vectorWithNodes, int n)
 {

@@ -1,7 +1,6 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <list>
 #include <vector>
 
 using namespace std;
@@ -10,13 +9,13 @@ class representGraph
 {
 private:
 	int n;
-	list<string> *adjacencyMatrix;
+	vector<string> *adjacencyMatrix;
 
 public:
 	representGraph(int n)
 	{
 		this->n = n;
-		adjacencyMatrix = new list<string>[n];
+		adjacencyMatrix = new vector<string>[n];
 	}
 	~representGraph() { delete[] adjacencyMatrix; }
 
@@ -36,7 +35,7 @@ void representGraph::DFSUtil(int nodeX, bool visited[])
 {
 	visited[nodeX] = true;
 
-	list<string>::iterator i;
+	vector<string>::iterator i;
 	for (i = adjacencyMatrix[nodeX].begin(); i != adjacencyMatrix[nodeX].end(); i++){
 		if (!visited[*i]){
 			DFSUtil(*i, visited);
@@ -50,7 +49,7 @@ int main(int argc, char *argv[])
 	ifstream myFile;
 	string fileName = argv[1];
 	vector<string> nodes;
-	//list<vector<string>> connected;
+	vector<vector<string>> connected;
 
 	string line;
 	bool emptyLineFound = false;
@@ -157,21 +156,20 @@ int compareStringToVector(string comparison, vector<string> vectorWithNodes, int
 }
 
 
-
 //nodeEdge kollar hur många noder som har udda kanter
 /*void checkEuler()
 {
-   if (int nodeEdge >= 2)
+   if (int odd > 2)
    {
       std::cout << "No path available.";
    }
 }*/
 
 /*
-    -Input från en fil, dynamisk char/string array? alternativt vektor/er.
+    -Input från en fil, dynamisk char/string array? alternativt vektor/er/lista.
     -Kolla input och designera noder från filen
     -Länka noderna i ordningen som visas i filen, eg a -> b, alfa -> beta (verkar inte stå i samma nod-system)
-    -Implementera algoritm för att kolla om det finns en hamiltoncykel tillgänglig
+    -Implementera algoritm för att kolla om det finns en eulerväg tillgänglig
     -Start och slutpos avgörs av func
 */
 

@@ -39,6 +39,7 @@ void representGraph::connectNodes(int x, int y)
 void representGraph::DFSFunction(int nodeX, bool visited[]) //change this to know that a road was used, not a node.
 {
 	cout << "Made it into the DFSFunction, with nodeX value as: " << nodeX << endl;
+	//cout << "which road gets used: " << visited[nodeX] << endl; 
 	visited[nodeX] = true;
 	list<int>::iterator i;
 	for (i = adjacencyMatrix[nodeX].begin(); i != adjacencyMatrix[nodeX].end(); i++)
@@ -54,7 +55,7 @@ void representGraph::DFSFunction(int nodeX, bool visited[]) //change this to kno
 bool representGraph::checkAllConnections()
 {
 	cout << "Made it to the connection func. " << endl;
-	bool connected;
+	bool connected = true;
 	bool visited[e];
 	int i;
 	for (i = 0; i < e; i++)
@@ -82,7 +83,8 @@ bool representGraph::checkAllConnections()
 	for (i = 0; i < n; i++)
 	{
 		if (visited[i] == false && adjacencyMatrix[i].size() > 0)
-		{
+		{	
+			cout << "Node nr: " << i << " was not connected."<< endl;
 			connected = false;
 		}
 	}
@@ -227,10 +229,10 @@ int main(int argc, char *argv[])
 	{
 		cout << *l << " ";
 	}
+	cout << "From adjacencylist: ";
 	myFile.close();
 	return 0;
 }
-
 
 int compareStringToVector(string comparison, vector<string> vectorWithNodes, int n)
 {

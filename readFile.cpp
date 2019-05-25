@@ -33,6 +33,7 @@ Graph::Graph(int n)
 void Graph::addEdge(int v, int w) 
 { 
     adj[v].push_back(w); // Add w to v’s list. 
+    adj[w].push_back(v);
 } 
   
 void Graph::BFS(int s) 
@@ -58,6 +59,7 @@ void Graph::BFS(int s)
         // Dequeue a vertex from queue and print it 
         s = queue.front(); 
         cout << s << " "; 
+        //queue.push_back(s);
         queue.pop_front(); 
   
         // Get all adjacent vertices of the dequeued 
@@ -225,7 +227,7 @@ int main(int argc, char *argv[])
 			}
 			else if (columnInFile == 2)
 			{
-				graph1.addEdge(nodeX, nodeY);
+				graph1.addEdge(nodeX, nodeY); //revert these!!!
 				//cout << line << endl;
 				columnInFile = 0;
 				nodeX = 0;
@@ -233,7 +235,7 @@ int main(int argc, char *argv[])
 			}
 		}
         //fix this
-		graph1.BFS(4);
+		graph1.BFS(3);
 	}
 	else
 	{

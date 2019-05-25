@@ -38,7 +38,7 @@ public:
 void representGraph::connectNodes(int x, int y)
 {
 	cout << "Connecting node: " << x << " with node " << y << endl;
-	adjacencyMatrix[x].push_back(y);
+	edges[x].push_back(y);
 	e++;
 }
 

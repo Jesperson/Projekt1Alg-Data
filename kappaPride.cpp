@@ -3,6 +3,7 @@
 #include <vector>
 #include <fstream>
 #include <algorithm>
+#include <string.h>
 
 using namespace std;
 
@@ -20,35 +21,35 @@ public:
 		adj = new list<int>[V];
 	}
 	~Graph() { delete[] adj; }
-
+	string result = "2\n";
+	vector<string> nodes;
 	// Lägg till kant
 	void addEdge(int u, int v)
 	{
 		adj[u].push_back(v);
 		adj[v].push_back(u);
-		cout << "Kant tillagd mellan " << u << " och " << v << "." << endl;
 	}
 	void rmvEdge(int u, int v);
 
 	// Skriv output till variabel (outputResult)
 	void printEulerTour();
-	void printEulerUtil(int s);
+	void printEulerUtil(int s, vector<string> nodes, string resultat);
 
 	// Räkna antal kanter som finns tillgängliga från en nod
 	int countEdge(int v, bool visited[]);
 
-	// Utility function to check if edge u-v is a valid next edge in
-	// Eulerian trail or circuit
+	// Kolla om kanten funkar (om den inte redan är "använd" aka -1)
 	bool isValidNextEdge(int u, int v);
 };
 
 /* The main function that print Eulerian Trail. It first finds an odd 
    degree vertex (if there is any) and then calls printEulerUtil() 
    to print the path */
-	 //
+//
 void Graph::printEulerTour()
 {
-	// Find a vertex with odd degree
+	// Hitta en kant med udda gradtal
+	string result;
 	int u = 0;
 	for (int i = 0; i < V; i++)
 		if (adj[i].size() % 2 == 1)
@@ -59,13 +60,15 @@ void Graph::printEulerTour()
 		}
 
 	// Print tour starting from oddv
-	printEulerUtil(u);
+	printEulerUtil(u, nodes, result);
 	cout << endl;
 }
 
-// Print Euler tour starting from vertex u
-void Graph::printEulerUtil(int u)
+// Skriver (INTE GJORD ÄN) nodkoppling
+void Graph::printEulerUtil(int u, vector<string> nodes, string result)
 {
+	vector<string> noder;
+	string resultat;
 	// Recur for all the vertices adjacent to this vertex
 	list<int>::iterator i;
 	for (i = adj[u].begin(); i != adj[u].end(); ++i)
@@ -75,9 +78,14 @@ void Graph::printEulerUtil(int u)
 		// If edge u-v is not removed and it's a a valid next edge
 		if (v != -1 && isValidNextEdge(u, v))
 		{
+			//cout << "Trying to output the result string after assigning (or adding) the noder[u] name to the string." << endl;
+			//resultat = resultat + noder[u] + " " + " -> " + noder[v];
+			//cout << result;
+			//cout << noder[1];
+			//cout << resultat;
 			cout << u << "-" << v << "  ";
 			rmvEdge(u, v);
-			printEulerUtil(v);
+			printEulerUtil(v, noder, result);
 		}
 	}
 }
@@ -102,13 +110,13 @@ bool Graph::isValidNextEdge(int u, int v)
 
 	// 2.a) count of vertices reachable from u
 	bool visited[V];
-	//memset(visited, false, V);
+	memset(visited, false, V);
 	int count1 = countEdge(u, visited);
 
 	// 2.b) Remove edge (u, v) and after removing the edge, count
 	// vertices reachable from u
 	rmvEdge(u, v);
-	//memset(visited, false, V);
+	memset(visited, false, V);
 	int count2 = countEdge(u, visited);
 
 	// 2.c) Add the edge back to the graph
@@ -147,13 +155,20 @@ int Graph::countEdge(int v, bool visited[])
 	return count;
 }
 
+void printToOutput(string result)
+{
+	ofstream output;
+	output.open("Output.txt");
+	output << result;
+	output.close();
+}
+
 int compareStringToVector(string comparison, vector<string> vectorWithNodes, int n);
 int main(int argc, char *argv[])
 {
-
+	vector<string> nodes;
 	ifstream myFile;
 	string fileName = argv[1];
-	vector<string> nodes;
 	list<int> nodesInt;
 	//list<vector<string>> connected;
 

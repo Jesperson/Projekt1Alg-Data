@@ -14,7 +14,7 @@ private:
 	int o = 0;
 	int e = 0;
 	list<int> *adjacencyMatrix;
-	list<int> edges;
+	list<int> *edges;
 	string result;
 	int oddNodes[2];
 
@@ -61,7 +61,7 @@ void representGraph::BFSFunction(int n) //change this to know that a road was us
 		//Lägg till output till result här <<<<<<<<<<<<<
 		qV.pop_front();
 
-		for (i = adjacencyMatrix[n].begin(); i != adjacencyMatrix[n].end(); i++)
+		for (i = edges[n].begin(); i != edges[n].end(); i++)
 		{
 			if (!visited[*i])
 			{

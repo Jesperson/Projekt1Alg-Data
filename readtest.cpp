@@ -9,8 +9,14 @@ using namespace std;
 class representGraph
 {
 private:
-	int n, e;
+	int odd = 0;
+	int n;
+	int o = 0;
+	int e = 0;
 	list<int> *adjacencyMatrix;
+	list<int> edges;
+	string result;
+	int oddNodes[2];
 
 public:
 	representGraph(int n)
@@ -21,34 +27,47 @@ public:
 	~representGraph() { delete[] adjacencyMatrix; }
 
 	void connectNodes(int x, int y);
-	void DFSFunction(int n, bool visited[]); //DFS was the easiest algorithm to implement a graph, and that's why we decided to use this.
+	void BFSFunction(int n); //DFS was the easiest algorithm to implement a graph, and that's why we decided to use this.
 	bool checkAllConnections();
 	bool pathAvailable(); //add int list as parameter here <3
 	void outputResultToFile(string result, bool possible);
 	void test(representGraph &g);
 };
 
+//Connect Nodes (Add V)
 void representGraph::connectNodes(int x, int y)
 {
 	cout << "Connecting node: " << x << " with node " << y << endl;
-	adjacencyMatrix[x].push_back(y); 
-	adjacencyMatrix[y].push_back(x);
+	adjacencyMatrix[x].push_back(y);
 	e++;
 }
 
-void representGraph::DFSFunction(int nodeX, bool visited[]) //change this to know that a road was used, not a node.
+//BFS Func
+void representGraph::BFSFunction(int n) //change this to know that a road was used, not a node.
 {
-	cout << "Made it into the DFSFunction, with nodeX value as: " << nodeX << endl;
-	//cout << "which road gets used: " << visited[nodeX] << endl; 
-	visited[nodeX] = true;
+	bool *visited = new bool[n];
+	for (int i = 0; i < n; i++)
+		visited[i] = false;
+
+	list<int> qV;  //Queue Vertex List
+
+	visited[n] = true;
+	qV.push_back(n);
 	list<int>::iterator i;
-	for (i = adjacencyMatrix[nodeX].begin(); i != adjacencyMatrix[nodeX].end(); i++)
+
+	while(!qV.empty())
 	{
+		n = qV.front();
+		//Lägg till output till result här <<<<<<<<<<<<<
+		qV.pop_front();
 
-		if (!visited[*i])
+		for (i = adjacencyMatrix[n].begin(); i != adjacencyMatrix[n].end(); i++)
 		{
-
-			DFSFunction(*i, visited);
+			if (!visited[*i])
+			{
+				visited[*i] = true;
+				qV.push_back(*i);
+			}
 		}
 	}
 }
@@ -56,12 +75,11 @@ bool representGraph::checkAllConnections()
 {
 	cout << "Made it to the connection func. " << endl;
 	bool connected = true;
-	cout << e << endl;
-	bool visited[e];
+	int visited[e];
 	int i;
 	for (i = 0; i < e; i++)
 	{
-		visited[i] = false;
+		visited[i] = 0;
 	}
 	cout << e << endl;
 	/*for (i = 0; i < n; i++){
@@ -78,14 +96,14 @@ bool representGraph::checkAllConnections()
 	{
 		connected = true;
 	}
-
-	DFSFunction(i, visited);
+	cout << "Rad 97";
+	BFSFunction(n);
 
 	for (i = 0; i < n; i++)
 	{
 		if (visited[i] == false && adjacencyMatrix[i].size() > 0)
-		{	
-			cout << "Node nr: " << i << " was not connected."<< endl;
+		{
+			cout << "Node nr: " << i << " was not connected." << endl;
 			connected = false;
 		}
 	}
@@ -97,7 +115,6 @@ bool representGraph::pathAvailable()
 { //add list as parameter here <3
 
 	int possible = -1;
-	string result;
 	//checks if all non-isolated nodes are connected to eachother, aka not 2 graphs or similar problems
 	if (checkAllConnections() == false)
 	{
@@ -105,14 +122,11 @@ bool representGraph::pathAvailable()
 	}
 
 	//checks for the number of odd nodes, using the size of the list of nodes connected to a certain node
-	int odd = 0;
-	int oddNodes[n];
-	for (int i = 0; i < n; i++)
+	for (int i = 0; i < o; i++)
 	{
 		if (adjacencyMatrix[i].size() % 2 == 1)
 		{
-			oddNodes[odd] = i;
-			odd++;
+			oddNodes[0] = i;
 		}
 	}
 	//checks if the graph has more than 2 odd nodes, it is impossible to solve.

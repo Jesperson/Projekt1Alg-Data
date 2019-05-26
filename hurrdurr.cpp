@@ -33,10 +33,18 @@ public:
 	// Markerar en kant som besökt för att strukturen av vårt program ska fungera
 	void visitEdge(int u, int v);
 
-    // Kollar om en graf går att lösa och om den är 
+    // Kollar om en graf går att lösa och om den går att lösa, får den en startnod om det finns
+    // en nod med udda antal kanter, samt kallar på funktionen som beräknar hur den ska lösas
 	void checkPath(vector<string> nodes);
+
+    // Funktionen som ska beräkna hur grafen ska lösas samt skriver in resultatet i en sträng
 	void calculatePathToResult(int s, vector<string> nodes);
+
+
 	void printResult();
+
+    // Denna funktionen öppnar filen "Output.txt", om denna inte finns, skapas en fil med detta namn,
+    // och resultatet från calculatePathToResult skrivs in i filen
 	void printToOutput();
 
 	// Räkna antal kanter som finns tillgängliga från nod[v]
@@ -100,12 +108,6 @@ void Graph::calculatePathToResult(int u, vector<string> nodes)
 			calculatePathToResult(v, nodes);
 		}
 	}
-}
-
-void Graph::printResult()
-{
-	cout << V;
-	cout << result;
 }
 
 // Funktionen kollar om kanten mellan nod u och nod v kan vara nästa kant i EulerTour
@@ -193,26 +195,24 @@ void Graph::printToOutput()
 	output.open("Output.txt");
 	output << result;
 	output.close();
+    cout << "Results were printed to 'Output.txt'. " << endl;
 }
 
 int compareStringToVector(string comparison, vector<string> vectorWithNodes, int n);
 int main(int argc, char *argv[])
 {
-	vector<string> nodes;
+	vector<string> nodes; // Vektor med nodernas namn
 	ifstream myFile;
 	string fileName = argv[1];
-	list<int> nodesInt;
+	list<int> nodesInt; // Lista av nodindex
 
-	string line;
+	string line; // Input läst från .txt fil
 	bool emptyLineFound = false;
-	int n = 0;
+	int n = 0; // Antal noder
 
 	myFile.open(argv[1]);
 	if (myFile.is_open())
 	{
-
-		cout << "opened the file" << endl;
-
 		while (emptyLineFound == false)
 		{
 			getline(myFile, line);
@@ -242,7 +242,6 @@ int main(int argc, char *argv[])
 			// Om informationen läses från kolumn 1, innebär det att det ska gå en kant från denna noden
 			if (columnInFile == 0)
 			{
-
 				nodeX = compareStringToVector(line, nodes, n);
 				columnInFile = 1;
 			}
@@ -253,7 +252,7 @@ int main(int argc, char *argv[])
 				columnInFile = 2;
 			}
 			// Då informationen i kolumn 3 är orelevant för vår implementation så kopplas noderna ihop
-			// här, samt återställer variablarna som används
+			// här, samt återställer variablarna som används i föregående if-satser
 			else if (columnInFile == 2)
 
 			{
@@ -264,7 +263,6 @@ int main(int argc, char *argv[])
 			}
 		}
 		graph1.checkPath(nodes);
-		//graph1.printResult();
 		graph1.printToOutput();
 	}
 	else

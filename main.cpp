@@ -30,37 +30,60 @@ public:
 		adj[u].push_back(v);
 		adj[v].push_back(u);
 	}
-	// Markerar en kant som besökt för att strukturen av vårt program ska fungera
+
+	// Funktionen tar bort kanten mellan u och v från grafen. Detta gör den genom att sätta dess värde i adj listan till -1
 	void visitEdge(int u, int v);
 
-    // Kollar om en graf går att lösa och om den går att lösa, får den en startnod om det finns
-    // en nod med udda antal kanter, samt kallar på funktionen som beräknar hur den ska lösas
-	void checkPath(vector<string> nodes);
-
-    // Funktionen som ska beräkna hur grafen ska lösas samt skriver in resultatet i en sträng
-	void calculatePathToResult(int s, vector<string> nodes);
-
-
-	void printResult();
-
-    // Denna funktionen öppnar filen "Output.txt", om denna inte finns, skapas en fil med detta namn,
-    // och resultatet från calculatePathToResult skrivs in i filen
-	void printToOutput();
-
-	// Räkna antal kanter som finns tillgängliga från nod[v]
+	// Funktionen är baserad på DFS och räknar antalet giltiga kanter som finns från nod[v]
 	int countEdge(int v, bool visited[]);
+
+	// Kollar om en graf går att lösa och om den går att lösa, får den en startnod om det finns
+	// en nod med udda antal kanter, samt kallar på funktionen som beräknar hur den ska lösas
+	void checkPath(vector<string> nodes);
 
 	// Kolla om kanten är giltig, är kanten redan besökt har den värdet -1
 	bool checkNextEdge(int u, int v);
+
+	// Funktionen som ska beräkna hur grafen ska lösas samt skriver in resultatet i en sträng
+	void calculatePathToResult(int u, vector<string> nodes);
+
+	// Denna funktionen öppnar filen "Output.txt", om denna inte finns, skapas en fil med detta namn,
+	// och resultatet från calculatePathToResult skrivs in i filen
+	void printToOutput();
 };
 
-/* The main function that print Eulerian Trail. It first finds an odd 
-   degree vertex (if there is any) and then calls calculatePathToResult() 
-   to print the path */
-//
+void Graph::visitEdge(int u, int v)
+{
+	// Iteratorn använder sig av find för att hitta v i adj listan av nod u och ersätter dess värde med -1
+	list<int>::iterator iv = find(adj[u].begin(), adj[u].end(), v);
+	*iv = -1;
+
+	// Samma sak här, men istället för att hitta v i adj[u], letar den efter u i adj[v] och ersätter värdet med -1
+	list<int>::iterator iu = find(adj[v].begin(), adj[v].end(), u);
+	*iu = -1;
+}
+
+int Graph::countEdge(int v, bool visited[])
+{
+	// Markera den nuvarande noden som besökt
+	visited[v] = true;
+	int count = 1;
+
+	// Kalla på funktionen igen samt öka count så länge det finns en kant kopplad till den här noden
+	list<int>::iterator i;
+	for (i = adj[v].begin(); i != adj[v].end(); ++i)
+	{
+		if (*i != -1 && !visited[*i])
+			count += countEdge(*i, visited);
+	}
+
+	return count;
+}
+
 void Graph::checkPath(vector<string> nodes)
 {
 	int odd = 0;
+
 	// Hittar kanter med udda gradtal/antal vägar, huvudsakligen för att räkna om grafen går att lösa
 	// Om grafen är lösbar vet programmet även att den ska börja på en udda nod istället för den först inlästa noden
 	for (int i = 0; i < V; i++)
@@ -80,6 +103,7 @@ void Graph::checkPath(vector<string> nodes)
 		string addText = "NO PATH FOUND";
 		result.append(addText);
 	}
+
 	// Om det inte finns det, går programmet vidare och försöker hitta en Euler-väg i grafen.
 	else
 	{
@@ -89,28 +113,6 @@ void Graph::checkPath(vector<string> nodes)
 	}
 }
 
-// Traverserar vägen, som sparar det slutgiltliga resultatet i en sträng. Vägen börjar med startingNode
-// calculatePathToResult
-void Graph::calculatePathToResult(int u, vector<string> nodes)
-{
-	// Recur for all the vertices adjacent to this vertex
-	string addToResult;
-	list<int>::iterator i;
-	for (i = adj[u].begin(); i != adj[u].end(); ++i)
-	{
-		int v = *i;
-
-		if (v != -1 && checkNextEdge(u, v))
-		{
-			addToResult = " -> " + nodes[v];
-			result.append(addToResult);
-			visitEdge(u, v);
-			calculatePathToResult(v, nodes);
-		}
-	}
-}
-
-// Funktionen kollar om kanten mellan nod u och nod v kan vara nästa kant i EulerTour
 bool Graph::checkNextEdge(int u, int v)
 {
 	// The edge u-v is valid in one of the following two cases:
@@ -159,34 +161,25 @@ bool Graph::checkNextEdge(int u, int v)
 	return isValid;
 }
 
-// Funktionen tar bort kanten mellan u och v från grafen. Detta gör den genom att sätta dess värde i adj listan till -1
-void Graph::visitEdge(int u, int v)
+void Graph::calculatePathToResult(int u, vector<string> nodes)
 {
-	// Iteratorn använder sig av find för att hitta v i adj listan av nod u och ersätter dess värde med -1
-	list<int>::iterator iv = find(adj[u].begin(), adj[u].end(), v);
-	*iv = -1;
 
-	// Samma sak här, men istället för att hitta v i adj[u], letar den efter u i adj[v] och ersätter värdet med -1
-	list<int>::iterator iu = find(adj[v].begin(), adj[v].end(), u);
-	*iu = -1;
-}
-
-// Funktionen är baserad på DFS och räknar antalet giltiga kanter från nod v
-int Graph::countEdge(int v, bool visited[])
-{
-	// Mark the current node as visited
-	visited[v] = true;
-	int count = 1;
-
-	// Recur for all vertices adjacent to this vertex
+	string addToResult;
 	list<int>::iterator i;
-	for (i = adj[v].begin(); i != adj[v].end(); ++i)
-	{
-		if (*i != -1 && !visited[*i])
-			count += countEdge(*i, visited);
-	}
 
-	return count;
+	// Kalla på funktionen igen, så länge det finns en nod v som inte är besökt, har en giltig kant, samt lägg till traverserade noder i result
+	for (i = adj[u].begin(); i != adj[u].end(); ++i)
+	{
+		int v = *i;
+
+		if (v != -1 && checkNextEdge(u, v))
+		{
+			addToResult = " -> " + nodes[v];
+			result.append(addToResult);
+			visitEdge(u, v);
+			calculatePathToResult(v, nodes);
+		}
+	}
 }
 
 void Graph::printToOutput()
@@ -195,7 +188,7 @@ void Graph::printToOutput()
 	output.open("Output.txt");
 	output << result;
 	output.close();
-    cout << "Results were printed to 'Output.txt'. " << endl;
+	cout << "Results were printed to 'Output.txt'. " << endl;
 }
 
 int compareStringToVector(string comparison, vector<string> vectorWithNodes, int n);
@@ -233,7 +226,7 @@ int main(int argc, char *argv[])
 			}
 		}
 		//Ändrar input läsning samt hantering, för att hantera i formatet: "nod1"\t"nod2"\t"siffra" ex. Alpha'\t'Gamma'\t'2
-		Graph graph1(n); //skapar ett objekt av Graph med n antal noder
+		Graph graph1(n);	  //skapar ett objekt av Graph med n antal noder
 		int columnInFile = 0; // Med hjälp av if-satser hanterar programmet inputen olika baserat på vilken kolumn den läser ifrån.
 		int nodeX = 0;
 		int nodeY = 0;

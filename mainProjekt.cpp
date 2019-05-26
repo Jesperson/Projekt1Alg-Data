@@ -15,7 +15,6 @@ class Graph
 	list<int> *adj; // Lista för att hålla koll på länkar/vägar mellan noder
 	int startingNode = 0;
 	string result = "2\n";
-	bool isPossible;
 
 public:
 	// Const & destr
@@ -66,15 +65,16 @@ void Graph::printEulerTour(vector<string> nodes)
 	}
 	// Då det inte kan finnas en Euler-väg om det finns fler än 2 noder med udda antal kanter
 	// kan vi redan här avgöra om programmet bör fortsätta eller inte
-	if (odd > 2) 
+
+	// Om det finns fler än 2 noder med udda kanter, går programmet direkt till att skriva ut resultatet i "Output.txt", och avslutas strax därefter
+	if (odd > 2)
 	{
-		isPossible = false;
 		string addText = "NO PATH FOUND";
 		result.append(addText);
 	}
+	// Om det inte finns det, går programmet vidare och försöker hitta en Euler-väg i grafen.
 	else
 	{
-		isPossible = true;
 		string addstart = nodes[startingNode];
 		result.append(addstart);
 		printEulerUtil(startingNode, nodes);
@@ -127,11 +127,11 @@ bool Graph::checkNextEdge(int u, int v)
 		return true;
 	}
 
-	// 2) Om det finns fler kanter, så är kanten mellan u och v inte en återvändsgränd 
+	// 2) Om det finns fler kanter, så är kanten mellan u och v inte en återvändsgränd
 
-	// Gör följande för att kolla om kant (u, v) är en återvändsgränd: 
+	// Gör följande för att kolla om kant (u, v) är en återvändsgränd:
 	// 2.a) räkna antalet kanter som är tillgängliga från nod u   count of vertices reachable from u
-	bool visited[V];
+	bool visited[2000];
 	memset(visited, false, V);
 	int count1 = countEdge(u, visited);
 
@@ -140,28 +140,30 @@ bool Graph::checkNextEdge(int u, int v)
 	memset(visited, false, V);
 	int count2 = countEdge(u, visited);
 
-	// 2.c) Lägg tillbaka kanten till grafen 
+	// 2.c) Lägg tillbaka kanten till grafen
 	addEdge(u, v);
 
 	// 2.d) Om count1 är större, innebär det att kant (u, v) är en återvändsgränd
 	bool isValid;
-	if(count1 > count2){
+	if (count1 > count2)
+	{
 		isValid = false; // Om kanten (u, v) är en bro, är alltså denna vägen inte en giltig nästa kant för att lösa grafen
 	}
-	else{
+	else
+	{
 		isValid = true;
 	}
-	return isValid; 
+	return isValid;
 }
 
 // Funktionen tar bort kanten mellan u och v från grafen. Detta gör den genom att sätta dess värde i adj listan till -1
 void Graph::visitEdge(int u, int v)
 {
-	// Iteratorn använder sig av find för att hitta v i adj listan av nod u och ersätter dess värde med -1 
+	// Iteratorn använder sig av find för att hitta v i adj listan av nod u och ersätter dess värde med -1
 	list<int>::iterator iv = find(adj[u].begin(), adj[u].end(), v);
 	*iv = -1;
 
-	// Samma sak här, men istället för att hitta v i adj[u], letar den efter u i adj[v] och ersätter värdet med -1 
+	// Samma sak här, men istället för att hitta v i adj[u], letar den efter u i adj[v] och ersätter värdet med -1
 	list<int>::iterator iu = find(adj[v].begin(), adj[v].end(), u);
 	*iu = -1;
 }
@@ -188,14 +190,7 @@ void Graph::printToOutput()
 {
 	ofstream output;
 	output.open("Output.txt");
-	if (isPossible == false)
-	{
-		output << result;
-	}
-	else if (isPossible == true)
-	{
-		output << result;
-	}
+	output << result;
 	output.close();
 }
 
@@ -242,24 +237,24 @@ int main(int argc, char *argv[])
 		int nodeX = 0;
 		int nodeY = 0;
 		while (myFile >> line)
-		{	
+		{
 			// Om informationen läses från kolumn 1, innebär det att det ska gå en kant från denna noden
-			if (columnInFile == 0) 
+			if (columnInFile == 0)
 			{
 
 				nodeX = compareStringToVector(line, nodes, n);
 				columnInFile = 1;
 			}
 			// Om informationen läses från kolumn 2, innebär det att noden från kolumn 1 ska kopplas med en kant till denna noden
-			else if (columnInFile == 1) 
+			else if (columnInFile == 1)
 			{
 				nodeY = compareStringToVector(line, nodes, n);
 				columnInFile = 2;
 			}
-			// Då informationen i kolumn 3 är orelevant för vår implementation så kopplas noderna ihop 
+			// Då informationen i kolumn 3 är orelevant för vår implementation så kopplas noderna ihop
 			// här, samt återställer variablarna som används
-			else if (columnInFile == 2) 
-										
+			else if (columnInFile == 2)
+
 			{
 				graph1.addEdge(nodeX, nodeY);
 				columnInFile = 0;

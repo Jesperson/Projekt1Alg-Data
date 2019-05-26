@@ -12,11 +12,10 @@ using namespace std;
 // adjacency list representation
 class Graph
 {
-  int V = 0;          // Antal kanter
+  int V = 0;      // Antal kanter
   list<int> *adj; // Lista för att hålla koll på länkar
   int startingNode = 0;
   string result = "2\n";
-  bool isPossible;
 
 public:
   // Const & destr
@@ -66,13 +65,11 @@ void Graph::printEulerTour(vector<string> nodes)
   }
   if (odd > 2)
   {
-    isPossible = false;
     string addText = "NO PATH FOUND";
     result.append(addText);
   }
   else
   {
-    isPossible = true;
     string addstart = nodes[startingNode];
     result.append(addstart);
     // Print tour starting from oddv
@@ -129,7 +126,7 @@ bool Graph::isValidNextEdge(int u, int v)
   // Do following steps to check if u-v is a bridge
 
   // 2.a) count of vertices reachable from u
-  bool visited[2000];//ändra relevanta funktioner som använder visited
+  bool visited[2000]; //ändra relevanta funktioner som använder visited
   memset(visited, false, V);
   int count1 = countEdge(u, visited);
 
@@ -180,14 +177,7 @@ void Graph::printToOutput()
 {
   ofstream output;
   output.open("Output.txt");
-  if (isPossible == false)
-  {
-    output << result;
-  }
-  else if (isPossible == true)
-  {
-    output << result;
-  }
+  output << result;
   output.close();
 }
 
